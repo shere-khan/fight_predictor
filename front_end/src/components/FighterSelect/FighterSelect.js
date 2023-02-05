@@ -5,7 +5,7 @@ const PredictionContainer = () => {
 
     return (
         <div>
-            <div className= 'seperator'>
+            <div className='seperator'>
                 <PredictionGrid/>
             </div>
         </div>

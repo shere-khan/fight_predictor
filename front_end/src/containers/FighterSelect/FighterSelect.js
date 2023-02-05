@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import React, {useState, useEffect, useReducer} from 'react';
+import {Button, Form, FormGroup, Label, Input} from 'reactstrap';
 import Select from 'react-select';
 
 const initialState = {
     fighter1: '',
     fighter2: '',
 }
-function reducer(state, { field, value }) {
+
+function reducer(state, {field, value}) {
     return {
         ...state,
         [field]: value
@@ -25,7 +26,7 @@ const PredictionGrid = () => {
 
     const onChange = (e) => {
         console.log(e)
-        dispatch({ field: e.field, value: e.value })
+        dispatch({field: e.field, value: e.value})
     }
 
     const makePredictionQuery = (e) => {
@@ -62,8 +63,7 @@ const PredictionGrid = () => {
     }
 
 
-
-    const { fighter1, fighter2 } = selectedFighters
+    const {fighter1, fighter2} = selectedFighters
 
 
     async function fetchFighterData() {
@@ -81,23 +81,23 @@ const PredictionGrid = () => {
         label: v,
         value: v,
         field: 'fighter1'
-      }));
+    }));
     const options2 = fighterNames.map(v => ({
         label: v,
         value: v,
         field: 'fighter2'
 
-      }));
+    }));
     console.log(selectedFighters)
     return (
-        <Form >
-            <FormGroup >
+        <Form>
+            <FormGroup>
                 <Label for="Fighter1" className="mr-sm-2">Fighter 1</Label>
-                <Select 
-                name = 'fighter1'
-                value= {options1.find(option => option.value === {fighter1})}
-                options={options1}
-                onChange = {onChange} />
+                <Select
+                    name='fighter1'
+                    value={options1.find(option => option.value === {fighter1})}
+                    options={options1}
+                    onChange={onChange}/>
                 {/* <select
                     name="fighter1"
                     value={fighter1}
@@ -111,13 +111,13 @@ const PredictionGrid = () => {
                     ))}
                 </select> */}
             </FormGroup>
-            <FormGroup >
+            <FormGroup>
                 <Label for="Fighter2" className="mr-sm-2">Fighter 2</Label>
-                <Select 
-                name = 'fighter2'
-                value= {options2.find(option => option.value === {fighter2})}
-                options={options2}
-                onChange = {onChange} />
+                <Select
+                    name='fighter2'
+                    value={options2.find(option => option.value === {fighter2})}
+                    options={options2}
+                    onChange={onChange}/>
                 {/* <select
                     name="fighter2"
                     value={fighter2}

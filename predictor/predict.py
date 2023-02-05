@@ -9,8 +9,8 @@ from processor import ProductionProcessor
 from utils import r2
 
 
-class PreparePredictions:  
-            
+class PreparePredictions:
+
     def __init__(self):
         # the above params are not yet coded.
         self.get_fighters()
@@ -21,7 +21,7 @@ class PreparePredictions:
     def get_fighters(self):
         " Loads the scraped_fighters csv file into a dataframe "
         filedir = os.path.join(
-             'Data', 'Scraped_Data', 'scraped_fighters.csv')
+            'Data', 'Scraped_Data', 'scraped_fighters.csv')
         try:
             self.fighters = pd.read_csv(filedir)
         except Exception:
@@ -46,7 +46,8 @@ class PreparePredictions:
         self.f2_stats = self.get_fighter_data(pair[1])
 
     def create_stats_df(self, fighter_pairs):
-        "Takes a list of fighter name tuples and builds up a dataframe where each row represents a bout to predicted"
+        """Takes a list of fighter name tuples and builds up a
+        dataframe where each row represents a bout to predicted"""
         if isinstance(fighter_pairs, list):
             for pair in fighter_pairs:
                 # dynamically resets f1 and f2 stats for each pair
@@ -144,7 +145,8 @@ class Predict:
         final_winners_predicted = []
         for i, (pair1, pair2) in enumerate(zip(self.fighter_pairs, self.reversed_pairs)):
             # if it selects the same fighter each time that fighter is the predicted winner
-            if winner_preds[i][0] is 'fighter1' and reversed_winner_preds[i][0] is 'fighter2':
+            if winner_preds[i][0] is 'fighter1' and reversed_winner_preds[i][
+                0] is 'fighter2':
                 avg_prob = np.mean(
                     [winner_preds[i][1], reversed_winner_preds[i][1]])
                 final_winners_predicted.append((pair1[0], avg_prob))
@@ -183,7 +185,7 @@ class Predict:
 
 
 if __name__ == "__main__":
-    base_dir = os.path.join(os.getcwd(),'Files', 'Models')
+    base_dir = os.path.join(os.getcwd(), 'Files', 'Models')
     stats_model = keras.models.load_model(os.path.join(
         base_dir, 'stats_model.h5'), custom_objects={'r2': r2})
     winner_model = keras.models.load_model(os.path.join(

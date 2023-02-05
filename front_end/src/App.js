@@ -5,12 +5,12 @@ import Navbar from './components/Navbar/Navbar'
 import PredictionContainer from './components/FighterSelect/FighterSelect';
 
 function App() {
-  return (
-    <div>
-      <Navbar />
-      <PredictionContainer />
-    </div>
-  );
+    return (
+        <div>
+            <Navbar/>
+            <PredictionContainer/>
+        </div>
+    );
 }
 
 export default App;

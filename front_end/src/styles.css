@@ -1,36 +1,36 @@
-.winner, .confidence{
+.winner, .confidence {
     text-align: center;
     font-family: 'Roboto Mono', monospace;
 
 }
 
-.winnerResult{
+.winnerResult {
 
     font-family: 'Roboto Condensed', sans-serif;
     text-align: center;
     color: rgb(6, 156, 1);
 }
 
-.confidenceResult{
+.confidenceResult {
     font-family: 'Roboto Condensed', sans-serif;
     text-align: center;
     color: rgb(6, 156, 1);
 
 }
 
-.nav{
+.nav {
     background-color: black !important;
 }
 
-.navTitle{
+.navTitle {
     font-family: 'Audiowide', cursive;
-    font-size: 7.5vw ;
+    font-size: 7.5vw;
     color: white;
- 
+
 }
 
-.predictButton{
-    background-color: #C62828 ;
+.predictButton {
+    background-color: #C62828;
     border: none;
     margin: 0 auto;
     margin-block: 40px;
@@ -44,7 +44,7 @@
     margin-block: 100px;
 }
 
-.mr-sm-2{
+.mr-sm-2 {
     font-family: 'Roboto Condensed', sans-serif;
     display: block;
     text-align: center;

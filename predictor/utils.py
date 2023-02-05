@@ -1,4 +1,4 @@
-import tensorflow.keras.backend as K
+import keras.backend as K
 import numpy as np
 import os
 
@@ -18,9 +18,9 @@ def random_data_shuffle(x_train, y_train):
     return x_train, y_train
 
 
-def get_train_test_data(folder_name):
-    directory = os.path.join('Data',
-                             'Processed_Data', folder_name)
+def get_train_test_data(base_dir, folder_name):
+    directory = base_dir / 'Data' / 'Processed_Data' / folder_name
+    # directory = os.path.join('Data', 'Processed_Data', folder_name)
     with np.load(os.path.join(directory, 'data.npz')) as data:
         x_train = data['x_train']
         y_train = data['y_train']

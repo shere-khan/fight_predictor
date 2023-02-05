@@ -26,4 +26,3 @@ class FightScraperItem(Item):
     td_def = Field()  # takedown defence
     strike_def = Field()  # striking defence
     sub_avg = Field()  # submission average
-

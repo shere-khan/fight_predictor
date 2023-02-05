@@ -1,20 +1,19 @@
 .navbar {
-  text-align: center;
-  width: 100%;
-  background-color: black !important;
+    text-align: center;
+    width: 100%;
+    background-color: black !important;
 }
-
 
 
 .navbrand {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 
 }
 
-.navbrand  > a{
-  font-size: 1.5vw;
+.navbrand > a {
+    font-size: 1.5vw;
 
 }
 

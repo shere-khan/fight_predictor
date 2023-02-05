@@ -10,23 +10,24 @@ from pandas.api.types import CategoricalDtype
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 from sklearn.preprocessing import RobustScaler, StandardScaler, MinMaxScaler
+from pathlib import Path
 
 pd.set_option("mode.chained_assignment", None)
 
 
 class Processor:
 
-    def __init__(self):
+    def __init__(self, db, base_dir):
         self.scaler_name = 'win_scaler'
         self.imputer_name = 'win_imputer'
-        self.base_dir = os.path.join(os.getcwd())
+        # self.base_dir = os.path.join(os.getcwd())
+        self.base_dir = base_dir
+        self.fight_bouts = db
 
     def read(self):
-        filepath = os.path.join(
-            self.base_dir, "Data", "Scraped_Data", "fighters_bouts_joined.csv"
-        )
+        filepath = self.base_dir / "Data" / "Scraped_Data" / "fighters_bouts_joined.csv"
         # fight bouts is our primary data source for storing fighter and bout specific info
-        self.fight_bouts = pd.read_csv(filepath)
+        # self.fight_bouts = pd.read_csv(filepath)
 
     def drop_unused_columns(self):
 
@@ -75,7 +76,8 @@ class Processor:
             return columns_index
 
         def rearrange_data_to_col_index(col_index1, col_index2, fb_copy):
-            self.fight_bouts.iloc[random_winner_index, col_index1] = self.fight_bouts.iloc[
+            self.fight_bouts.iloc[random_winner_index, col_index1] = \
+            self.fight_bouts.iloc[
                 random_winner_index, col_index2].values
 
             self.fight_bouts.iloc[random_winner_index, col_index2] = fb_copy.iloc[
@@ -88,7 +90,8 @@ class Processor:
         f2_index = self.fight_bouts.columns.get_loc("fighter2")
 
         self.fight_bouts.iloc[random_winner_index, [
-            f1_index, f2_index]] = self.fight_bouts.iloc[random_winner_index, [f2_index, f1_index]].values
+            f1_index, f2_index]] = self.fight_bouts.iloc[
+            random_winner_index, [f2_index, f1_index]].values
 
         self.fight_bouts["winner"].iloc[random_winner_index] = self.fight_bouts[
             "fighter2"].iloc[random_winner_index]
@@ -128,10 +131,14 @@ class Processor:
         def calculate_age_at_fight(fighter_prefix):
             if state == 'production':
                 self.categorical_data[fighter_prefix + '_ageAtFight'] = (
-                    dt.datetime.now() - self.categorical_data[fighter_prefix + '_dob']).dt.days / 365.5
+                                                                                dt.datetime.now() -
+                                                                                self.categorical_data[
+                                                                                    fighter_prefix + '_dob']).dt.days / 365.5
             else:
                 self.categorical_data[fighter_prefix + '_ageAtFight'] = (
-                    self.categorical_data.event_date - self.categorical_data[fighter_prefix + '_dob']).dt.days / 365.5
+                                                                                self.categorical_data.event_date -
+                                                                                self.categorical_data[
+                                                                                    fighter_prefix + '_dob']).dt.days / 365.5
 
         def one_hot_encode_stances():
             if state == 'production':
@@ -139,7 +146,8 @@ class Processor:
                 f2_stances = self.categorical_data.f2_stance.values
                 self.categorical_data.drop(
                     columns=['f1_stance', 'f2_stance', 'f1_dob', 'f2_dob'], inplace=True)
-                stance_cols = [col for col in self.categorical_data.columns if 'stance' in col]
+                stance_cols = [col for col in self.categorical_data.columns if
+                               'stance' in col]
                 assign_correct_stance_production(f1_stances, f2_stances, stance_cols)
             else:
 
@@ -147,9 +155,10 @@ class Processor:
                 for stance in stances:
                     self.categorical_data = self.categorical_data.join(
                         pd.get_dummies(self.categorical_data[stance], prefix=stance))
-                     
+
                 self.categorical_data.drop(
-                    columns=['f1_stance', 'f2_stance', 'f1_dob', 'f2_dob', 'event_date'], inplace=True)
+                    columns=['f1_stance', 'f2_stance', 'f1_dob', 'f2_dob', 'event_date'],
+                    inplace=True)
 
         def assign_correct_stance_production(f1_stances, f2_stances, stance_cols):
             for i, (f1_stance, f2_stance) in enumerate(zip(f1_stances, f2_stances)):
@@ -163,10 +172,11 @@ class Processor:
                         if 'f2' in col:
                             temp_stance_cols.remove(col)
                     self.categorical_data.loc[i, temp_stance_cols] = 0
-                    
+
                 else:  # otherwise set all cols in that row to 0 
                     self.categorical_data.loc[i, stance_cols] = 0
-                    self.categorical_data.loc[i, ['f1_stance_Orthodox']] = 1  # give them orthodox stance by default
+                    self.categorical_data.loc[i, [
+                        'f1_stance_Orthodox']] = 1  # give them orthodox stance by default
 
                 if matched_f2_stance is not None:
                     self.categorical_data.loc[i, matched_f2_stance] = 1
@@ -176,20 +186,23 @@ class Processor:
                         if 'f1' in col:
                             temp_stance_cols.remove(col)
                     self.categorical_data.loc[i, temp_stance_cols] = 0
-  
+
                 else:
                     self.categorical_data.loc[i, stance_cols] = 0
-                    self.categorical_data.loc[i, ['f2_stance_Orthodox']] = 1  # give them orthodox stance by default
+                    self.categorical_data.loc[i, [
+                        'f2_stance_Orthodox']] = 1  # give them orthodox stance by default
 
         def match_stance(stance, stance_cols, prefix):
             for col in stance_cols:
                 temp_col = col.replace("_", " ").lower()
-                if isinstance(stance, str) and stance.lower() in temp_col and prefix in temp_col:
+                if isinstance(stance,
+                              str) and stance.lower() in temp_col and prefix in temp_col:
                     return col
 
         def encode_fighters():
             self.categorical_data['winner'] = (
-                self.categorical_data['fighter2'] == self.categorical_data['winner']).astype('int')
+                    self.categorical_data['fighter2'] == self.categorical_data[
+                'winner']).astype('int')
             self.categorical_data['fighter1'] = 0
             self.categorical_data['fighter2'] = 1
 
@@ -268,11 +281,11 @@ class Processor:
             # self.categorical_data.loc[self.record_index,
             #                           prefix + '_loss'] = loss
             self.categorical_data.loc[self.record_index,
-                                      prefix + '_draw'] = draw
+            prefix + '_draw'] = draw
             self.categorical_data.loc[self.record_index,
-                                      prefix + '_nc'] = nc
+            prefix + '_nc'] = nc
             self.categorical_data.loc[self.record_index,
-                                      prefix + '_ratio'] = (win / (win + loss))
+            prefix + '_ratio'] = (win / (win + loss))
             self.record_index += 1
 
         records = ['f1_record', 'f2_record']
@@ -355,13 +368,14 @@ class Processor:
 
 
 class StatsProcessor(Processor):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, db, base_dir):
+        super().__init__(db, base_dir)
         self.scaler_name = 'stats_scaler'
         self.imputer_name = 'stats_imputer'
 
         self.fight_stats_targets = ['pass_stat_f1', 'pass_stat_f2', 'str_stat_f1',
-                                    'str_stat_f2', 'sub_stat_f1', 'sub_stat_f2', 'td_stat_f1', 'td_stat_f2']
+                                    'str_stat_f2', 'sub_stat_f1', 'sub_stat_f2',
+                                    'td_stat_f1', 'td_stat_f2']
 
     def set_targets(self):
         self.targets = self.fight_bouts[self.fight_stats_targets]
@@ -397,7 +411,7 @@ class ProductionProcessor(Processor):
         super().__init__()
         self.fight_bouts = fight_bouts
         self.columns = columns
-        
+
     def win_impute(self):
         imputer_path = os.path.join(
             self.base_dir,
@@ -419,7 +433,7 @@ class ProductionProcessor(Processor):
             'win_scaler' + '.pkl')
         scaler = joblib.load(scaler_path)
         self.fight_bouts = scaler.transform(self.fight_bouts)
-    
+
     def stats_impute(self):
         imputer_path = os.path.join(
             self.base_dir,
@@ -441,15 +455,15 @@ class ProductionProcessor(Processor):
             'stats_scaler' + '.pkl')
         scaler = joblib.load(scaler_path)
         self.fight_bouts = scaler.transform(self.fight_bouts)
-    
+
     def reindex(self):
         self.fight_bouts = self.fight_bouts.reindex(columns=self.columns)
-    
+
     def winner_main(self):
         self.reindex()
         self.win_impute()
         self.win_scale()
-    
+
     def stats_main(self):
         self.drop_unused_columns()
         self.process_categorical_columns(state='production')
@@ -458,8 +472,9 @@ class ProductionProcessor(Processor):
         self.unscaled_df = self.fight_bouts.copy()
         self.stats_scale()
 
-if __name__ == "__main__":
-    p = Processor()
-    p.main()
-    sp = StatsProcessor()
-    sp.main()
+
+# if __name__ == "__main__":
+#     p = Processor()
+#     p.main()
+#     sp = StatsProcessor()
+#     sp.main()

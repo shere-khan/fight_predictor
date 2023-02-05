@@ -28,4 +28,3 @@ class BoutScraperItem(Item):
     round_ = Field()
     time = Field()
     winner = Field()
-

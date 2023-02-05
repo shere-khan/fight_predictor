@@ -57,26 +57,27 @@ class BoutScraperPipeline(object):
         return item
 
     def store_db(self, item):
-        self.curr.execute(""" INSERT INTO BOUTS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
-            item['event_date'],
-            item['event_name'],
-            item['fighter1'],
-            item['fighter2'],
-            item['pass_stat_f1'],
-            item['pass_stat_f2'],
-            item['round_'],
-            item['str_stat_f1'],
-            item['str_stat_f2'],
-            item['sub_stat_f1'],
-            item['sub_stat_f2'],
-            item['td_stat_f1'],
-            item['td_stat_f2'],
-            item['time'],
-            item['weight_class'],
-            item['win_method_finish'],
-            item['win_method_type'],
-            item['winner']
+        self.curr.execute(
+            """ INSERT INTO BOUTS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
+                item['event_date'],
+                item['event_name'],
+                item['fighter1'],
+                item['fighter2'],
+                item['pass_stat_f1'],
+                item['pass_stat_f2'],
+                item['round_'],
+                item['str_stat_f1'],
+                item['str_stat_f2'],
+                item['sub_stat_f1'],
+                item['sub_stat_f2'],
+                item['td_stat_f1'],
+                item['td_stat_f2'],
+                item['time'],
+                item['weight_class'],
+                item['win_method_finish'],
+                item['win_method_type'],
+                item['winner']
 
-        ))
+            ))
 
         self.conn.commit()

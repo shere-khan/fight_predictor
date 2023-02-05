@@ -14,7 +14,8 @@ class Fighters(scrapy.Spider):
 
     def start_requests(self):
         start_urls = [
-            'http://ufcstats.com/statistics/fighters?char=' + letter + '&page=all' for letter in string.ascii_lowercase
+            'http://ufcstats.com/statistics/fighters?char=' + letter + '&page=all' for
+            letter in string.ascii_lowercase
         ]
         for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -65,7 +66,8 @@ class Fighters(scrapy.Spider):
             fighter_item['strike_def'] = float(item.xpath(
                 'li[4]//text()').extract()[2].replace("%", ""))
 
-        for item in response.xpath('//div[@class="b-list__info-box-right b-list__info-box_style-margin-right"]//ul'):
+        for item in response.xpath(
+                '//div[@class="b-list__info-box-right b-list__info-box_style-margin-right"]//ul'):
             fighter_item['td_avg'] = float(
                 item.xpath('li[2]//text()').extract()[2])
             fighter_item['td_acc'] = int(item.xpath(
@@ -84,4 +86,4 @@ if __name__ == "__main__":
     })
 
     process.crawl(Fighters)
-    process.start() 
+    process.start()

@@ -51,24 +51,25 @@ class FightScraperPipeline(object):
         """)
 
     def store_db(self, item):
-        self.curr.execute(""" INSERT INTO fighters values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
-            item['date_of_birth'],
-            item['fighter_name'],
-            item['fighter_record'],
-            item['height'],
-            item['reach'],
-            item['sapm'],
-            item['slpm'],
-            item['stance'],
-            item['strike_acc'],
-            item['strike_def'],
-            item['sub_avg'],
-            item['td_acc'],
-            item['td_avg'],
-            item['td_def'],
-            item['weight']
+        self.curr.execute(
+            """ INSERT INTO fighters values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
+                item['date_of_birth'],
+                item['fighter_name'],
+                item['fighter_record'],
+                item['height'],
+                item['reach'],
+                item['sapm'],
+                item['slpm'],
+                item['stance'],
+                item['strike_acc'],
+                item['strike_def'],
+                item['sub_avg'],
+                item['td_acc'],
+                item['td_avg'],
+                item['td_def'],
+                item['weight']
 
-        ))
+            ))
 
         self.conn.commit()
 
