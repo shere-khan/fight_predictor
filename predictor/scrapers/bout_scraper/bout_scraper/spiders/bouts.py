@@ -28,10 +28,6 @@ class Bouts(scrapy.Spider):
         # detail page there is only a "\n" where a date should be.
         # we'll have to get the list of dates from here and join them
         # with the rest of the data manually
-        rows = response.xpath('//span[@class="b-statistics__date"]')
-        # for row in rows:
-        #     row =
-
         for link in links:
             yield scrapy.Request(link, callback=self.parse_bouts)
 

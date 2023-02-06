@@ -77,8 +77,8 @@ class Processor:
 
         def rearrange_data_to_col_index(col_index1, col_index2, fb_copy):
             self.fight_bouts.iloc[random_winner_index, col_index1] = \
-                self.fight_bouts.iloc[
-                    random_winner_index, col_index2].values
+            self.fight_bouts.iloc[
+                random_winner_index, col_index2].values
 
             self.fight_bouts.iloc[random_winner_index, col_index2] = fb_copy.iloc[
                 random_winner_index, col_index1
@@ -368,6 +368,7 @@ class Processor:
         self.save_train_test_to_file('Fight_Winner')
 
 
+
 class StatsProcessor(Processor):
     def __init__(self, db, base_dir):
         super().__init__(db, base_dir)
@@ -472,6 +473,7 @@ class ProductionProcessor(Processor):
         self.stats_impute()
         self.unscaled_df = self.fight_bouts.copy()
         self.stats_scale()
+
 
 # if __name__ == "__main__":
 #     p = Processor()
